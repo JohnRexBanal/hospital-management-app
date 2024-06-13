@@ -42,3 +42,54 @@
       </div>
     </div>
   </template>
+
+<script>
+import SideBar from '@/components/SideBar.vue';
+import { mapState, mapActions } from 'vuex';
+import axios from 'axios';
+
+export default {
+  name: 'DoctorProfile',
+  components: {
+    SideBar
+  },
+  data() {
+    return {
+      doctorProfile: {},
+      isLoadingUser: true,
+      userFetchError: null
+    };
+  },
+  computed: {
+    ...mapState(['user']),
+    isAuthenticated() {
+      return !!this.user;
+    },
+    isDoctor() {
+      return this.user && this.user.role === 'doctor';
+    }
+  },
+  methods: {
+    ...mapActions(['fetchCurrentUser']),
+    async fetchDoctorProfile() {
+      try {
+        const response = await axios.get(`${this.$root.$data.apiUrl}/doctor/profile/${this.user.id}`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        if (response.data && response.data.name) {
+          this.doctorProfile = response.data;
+        } else {
+          console.error('Unexpected response structure:', response);
+        }
+      } catch (error) {
+        console.error('API error:', error);
+        this.userFetchError = 'Failed to fetch user data.';
+      } finally {
+        this.isLoadingUser = false;
+      }
+    }
+  },
+};
+</script>

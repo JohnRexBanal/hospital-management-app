@@ -91,5 +91,14 @@ export default {
       }
     }
   },
+  created() {
+      if (this.isAuthenticated) {
+        this.fetchCurrentUser().then(() => {
+          if (this.isDoctor) {
+            this.fetchDoctorProfile();
+          }
+        });
+      }
+    }
 };
 </script>

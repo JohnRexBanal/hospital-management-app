@@ -103,4 +103,42 @@ export default {
 };
 </script>
 
+<style scoped>
+.card-header h4 {
+  margin: 0;
+}
+
+.custom-card {
+  max-width: 600px;
+}
+
+.custom-label {
+  font-weight: bold;
+}
+
+.custom-input {
+  max-width: 100%;
+}
+
+.alert {
+  margin-top: 20px;
+}
+
+.btn-primary {
+  background-color: #2c3e50;
+  border-color: #2c3e50;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+@media (max-width: 768px) {
+  .custom-card {
+    margin: 0 10px;
+  }
+}
+</style>
+
   

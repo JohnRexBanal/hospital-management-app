@@ -44,6 +44,63 @@
     </div>
   </template>
   
-  
+  <script>
+import { mapState, mapActions } from 'vuex';
+
+export default {
+  data() {
+    return {
+      form: {
+        id: '',
+        name: '',
+        email: '',
+        password: '',
+        password_confirmation: '',
+        specialization: '',
+        address: '',
+        phone: '',
+      },
+    };
+  },
+  computed: {
+    ...mapState(['selectedDoctor', 'error', 'updateStatus']),
+  },
+  methods: {
+    ...mapActions(['fetchSingleDoctor', 'updateDoctor']),
+    async loadDoctorProfile() {
+      const doctorId = this.$route.params.id;
+      await this.fetchSingleDoctor(doctorId);
+      this.populateForm();
+    },
+    populateForm() {
+      if (this.selectedDoctor) {
+        this.form.id = this.selectedDoctor.user_id;
+        this.form.name = this.selectedDoctor.user?.name || '';
+        this.form.email = this.selectedDoctor.user?.email || '';
+        this.form.specialization = this.selectedDoctor.specialization || '';
+        this.form.address = this.selectedDoctor.address || '';
+        this.form.phone = this.selectedDoctor.phone || '';
+      }
+    },
+    async updateDoctorData() {
+      await this.updateDoctor(this.form);
+      if (this.updateStatus === 'success') {
+        alert('Doctor updated successfully');
+        this.$router.push('/doctor/profile/view');
+      }
+    },
+  },
+  watch: {
+    selectedDoctor(newDoctor) {
+      if (newDoctor) {
+        this.populateForm();
+      }
+    },
+  },
+  created() {
+    this.loadDoctorProfile();
+  },
+};
+</script>
 
   

@@ -1,10 +1,22 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <div id="app">
+    <router-view />
+  </div>
 </template>
+
+<script>
+export default {
+  name: 'App',
+  data() {
+    return {
+      // assign in root component to easily change the api url in production environment
+      // it can be access using this.$root.$data.apiUrl in any component
+      apiUrl: 'http://127.0.0.1:8000/api',
+    }
+
+  }
+}
+</script>
 
 <style>
 #app {
@@ -13,18 +25,6 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-}
-
-nav {
-  padding: 30px;
-}
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
+  overflow-x: hidden;
 }
 </style>

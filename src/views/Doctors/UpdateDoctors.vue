@@ -43,3 +43,92 @@
       </div>
     </div>
   </template>
+  
+  <script>
+  import { mapState, mapActions } from 'vuex';
+  
+  export default {
+    data() {
+      return {
+        form: {
+          id: '',
+          name: '',
+          email: '',
+          password: '',
+          password_confirmation: '',
+          specialization: '',
+          address: '',
+          phone: ''
+        }
+      };
+    },
+    computed: {
+      ...mapState(['selectedDoctor', 'error', 'updateStatus']),
+    },
+    methods: {
+      ...mapActions(['fetchSingleDoctor', 'updateDoctor']),
+      async loadDoctor() {
+        const doctorId = this.$route.params.id;
+        await this.fetchSingleDoctor(doctorId);
+        console.log('Selected Doctor:', this.selectedDoctor);
+        if (this.selectedDoctor) {
+          this.form.id = this.selectedDoctor.user_id;
+        this.form.name = this.selectedDoctor.user?.name || '';  
+        this.form.email = this.selectedDoctor.user?.email || ''; 
+        this.form.specialization = this.selectedDoctor.specialization || '';  
+        this.form.address = this.selectedDoctor.address || '';  
+        this.form.phone = this.selectedDoctor.phone || '';  
+        }
+      },
+      async updateDoctorData() {
+        await this.updateDoctor(this.form);
+        if (this.updateStatus === 'success') {
+          alert('Doctor updated successfully');
+          this.$router.push('/doctors/list');
+        }
+      }
+    },
+    created() {
+      this.loadDoctor();
+    }
+  };
+
+  </script>
+  
+  <style scoped>
+.card-header h4 {
+  margin: 0;
+}
+
+.custom-card {
+  max-width: 600px;
+}
+
+.custom-label {
+  font-weight: bold;
+}
+
+.custom-input {
+  max-width: 100%;
+}
+
+.alert {
+  margin-top: 20px;
+}
+
+.btn-primary {
+  background-color: #2c3e50;
+  border-color: #2c3e50;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+@media (max-width: 768px) {
+  .custom-card {
+    margin: 0 10px;
+  }
+}
+</style>
